@@ -19,5 +19,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "false"
     volumes:
       - ./config/grafana_datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml:ro
+      - ./config/grafana_dashboards.yml:/etc/grafana/provisioning/dashboards/actividad8.yml:ro
+      - ./dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - prometheus
