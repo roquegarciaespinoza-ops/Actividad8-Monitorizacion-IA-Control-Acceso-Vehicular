@@ -78,7 +78,22 @@ def prometheus_metrics():
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path.startswith("/simulate?"):\n            from urllib.parse import parse_qs, urlsplit\n            params = parse_qs(urlsplit(self.path).query)\n            try:\n                latency = int(params.get("latency_ms", ["65"])[0])\n                if not 0 <= latency <= 5000:\n                    raise ValueError("latency_ms fuera de rango")\n                result = infer(simulated_latency_ms=latency, fail=params.get("fail", ["0"])[0] == "1",\n                               drift=params.get("drift", ["0"])[0] == "1")\n                body = json.dumps(result).encode()\n                self.send_response(200)\n            except ValueError:\n                body = b'{"error":"invalid_latency"}'\n                self.send_response(400)\n            self.send_header("Content-Type", "application/json")\n        elif self.path == "/metrics":
+        if self.path.startswith("/simulate?"):
+            from urllib.parse import parse_qs, urlsplit
+            params = parse_qs(urlsplit(self.path).query)
+            try:
+                latency = int(params.get("latency_ms", ["65"])[0])
+                if not 0 <= latency <= 5000:
+                    raise ValueError("latency_ms fuera de rango")
+                result = infer(simulated_latency_ms=latency, fail=params.get("fail", ["0"])[0] == "1",
+                               drift=params.get("drift", ["0"])[0] == "1")
+                body = json.dumps(result).encode()
+                self.send_response(200)
+            except ValueError:
+                body = b'{"error":"invalid_latency"}'
+                self.send_response(400)
+            self.send_header("Content-Type", "application/json")
+        elif self.path == "/metrics":
             body = prometheus_metrics().encode()
             self.send_response(200)
             self.send_header("Content-Type", "text/plain; version=0.0.4")
