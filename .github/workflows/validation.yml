@@ -1,0 +1,23 @@
+name: Validación Actividad 8
+on:
+  push:
+  pull_request:
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Tests sin dependencias externas
+        run: python -m unittest discover -s tests -v
+      - name: Ejecutar incidentes y conservar evidencias
+        run: |
+          mkdir -p evidence/generated
+          python -m simulations.incident_01_latency > evidence/generated/incident_01.json
+          python -m simulations.incident_02_drift > evidence/generated/incident_02.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: simulated-incident-evidence
+          path: evidence/generated/*.json
