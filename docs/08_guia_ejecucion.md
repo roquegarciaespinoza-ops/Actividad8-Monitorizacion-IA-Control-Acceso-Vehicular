@@ -13,7 +13,7 @@ python -m src.monitoring --requests 20
 ```
 
 ## Dashboard local (opcional)
-Terminal A: `python -m src.monitoring --serve` (sirve /health y /metrics en 127.0.0.1:8000). Terminal B: `docker compose up -d`. Prometheus: http://localhost:9090; Grafana: http://localhost:3000 (configurar contraseña segura al iniciar). Las métricas se acumulan en el proceso que sirve /metrics: ejecutar solicitudes de inferencia en otro proceso no modifica ese contador. Se incorporará un generador HTTP para tráfico al mismo proceso en la siguiente iteración.
+Terminal A: `python -m src.monitoring --serve` (sirve /health y /metrics en 127.0.0.1:8000). Terminal B: `docker compose up -d`. Prometheus: http://localhost:9090; Grafana: http://localhost:3000 (configurar contraseña segura al iniciar). Para generar tráfico en el mismo proceso: `curl "http://127.0.0.1:8000/simulate?latency_ms=50"`; degradación: `curl "http://127.0.0.1:8000/simulate?latency_ms=2500"`; error: `curl "http://127.0.0.1:8000/simulate?fail=1"`. Repetir llamadas para producir series temporales. Este endpoint debe mantenerse solo en entorno local de laboratorio.
 
 ## Estado y límites
 - El servicio usa datos sintéticos, no carga LinearSVC ni TrOCR.
