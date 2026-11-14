@@ -1,0 +1,1 @@
+# Fijar dependencias tras confirmar la versión funcional del modelo y las herramientas elegidas.
