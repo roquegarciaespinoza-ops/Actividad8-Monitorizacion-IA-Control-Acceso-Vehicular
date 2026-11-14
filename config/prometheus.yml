@@ -1,6 +1,10 @@
 global:
   scrape_interval: 5s
-rule_files:\n  - /etc/prometheus/alert_rules.yml\nscrape_configs:
+
+rule_files:
+  - /etc/prometheus/alert_rules.yml
+
+scrape_configs:
   - job_name: vehicle-access-simulator
     static_configs:
       - targets: ["host.docker.internal:8000"]
